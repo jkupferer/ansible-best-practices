@@ -20,17 +20,40 @@
 
 == Idempotence
 
+Levels of code quality:
+
+* Ansible code works once, cannot re-run
+* Check if code has run, avoids reconfiguring
+* Checks can reset, reconfigure
+* Reconfiguration properly indicates changes
+
 == Inventory
 
 === Use YAML
+
+=== Use `group_vars`
+
+=== Avoid `host_vars`
+
+Hosts should normally be grouped to specify the purpose assigned to each host.
+Even if there is only one host in a group, use of groups still provides clarity.
 
 === Group Naming
 
 == Playbook
 
-=== Playbook `group_vars` and `host_vars`?
+=== Avoid `group_vars` and `host_vars`?
 
+Using `group_vars` and `host_vars` in a playbook requires strict rules of ansible group naming which are best avoided.
+It is better practice to have variables for host and group names when a playbook needs different handling depending on the host or host group.
+If sets of variables need to be set based on group, try using `include_vars` instead using a check on the hosts groups (`group_names` special variable).
 
+--------------------------------------------------------------------------------
+- name: Include Database Host Vars
+  when: myplaybook_database_group_name in group_names
+  include_vars:
+    dir: vars/database/
+--------------------------------------------------------------------------------
 
 == Roles
 
@@ -62,6 +85,10 @@ Do not `ignore_errors`
 * Only use `shell` if you cannot use `command`
 
 == Variables
+
+=== Avoid `set_fact` unless it is a fact about the host
+
+Set vars on `include_tasks` or `include_role` instead.
 
 === Include all variables for configuration in `defaults/main.yml`
 
