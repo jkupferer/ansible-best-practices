@@ -75,6 +75,8 @@ If sets of variables need to be set based on group, try using `include_vars` ins
 
 === Name your tasks
 
+On every task, always include `name`.
+
 === User `verbosity` with `debug` tasks
 
 === Error Handling
@@ -89,6 +91,8 @@ https://docs.ansible.com/ansible/latest/user_guide/playbooks_error_handling.html
 
 === Fail early with `assert` and `fail`
 
+Using `fail`:
+
 --------------------------------------------------------------------------------
 - name: Check for valid url
   fail:
@@ -97,6 +101,8 @@ https://docs.ansible.com/ansible/latest/user_guide/playbooks_error_handling.html
     not myapp_url.startswith('https://') or
     not myapp_url is search('/myapp/')
 --------------------------------------------------------------------------------
+
+Using `assert`:
 
 --------------------------------------------------------------------------------
 - name: Assert valid url
@@ -140,15 +146,25 @@ myapp_openshift_image: quay.io/myorg/myapp:{{ myapp_version }}
 myapp_openshift_dev_nampsace: mapp-dev
 --------------------------------------------------------------------------------
 
+When registering variables, use `r_` prefix.
+
 == Testing
 
 == Lookup Plugins
 
+=== Use `env` for environment variables
+
+=== Disable use of dangerous lookups
+
+For example, `pipe`
+
 == Filters
 
-=== Use `default` filter
+=== Use `bool` to evaluate boolean expressions
 
-=== Pass all boolean values through `bool`
+=== Use `default` filter if a value may not be set
+
+=== Use `json_query` filter to process complex data structures
 
 === Use `quote` filter on commands
 
