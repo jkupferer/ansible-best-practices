@@ -1,0 +1,92 @@
+= Ansible Best Practices
+
+== Version Control
+
+== YAML
+
+=== Use Block Quotes
+
+```
+- name: Run Installer Script
+  command: >-
+    installer.sh
+    --config=example/config/path
+    --domain=app23.example.com
+    --enable-advanced-features
+    --admin-password={{ admin_password | quote }}
+  args:
+    creates: /etc/example/install.log
+```
+
+== Idempotence
+
+== Inventory
+
+=== Use YAML
+
+=== Group Naming
+
+== Playbook
+
+=== Playbook `group_vars` and `host_vars`?
+
+
+
+== Roles
+
+* Use Roles
+
+== Tasks
+
+=== Error Handling
+
+==== Use `failed_when`
+
+Do not `ignore_errors`
+
+=== `command` module
+
+* Use sparingly
+* Use `quote` filter with variables
+* Calling shell scripts from command?
+** Template shell script and copy to host
+* Don't call `ansible` or `ansible-playbook` from `command`
+* Use args:
+** `chdir` Set working directory for command
+** `creates` Only run if file does not exist
+** `removes` Only run if file exists
+** `warn` Use to disable warnings
+
+=== `shell` module
+
+* Only use `shell` if you cannot use `command`
+
+== Variables
+
+=== Include all variables for configuration in `defaults/main.yml`
+
+=== Process variables in `vars/main.yml`
+
+=== Prefix Variable Names
+
+--------------------------------------------------------------------------------
+myapp_version: latest
+myapp_openshift_image: quay.io/myorg/myapp:{{ myapp_version }}
+myapp_openshift_dev_nampsace: mapp-dev
+--------------------------------------------------------------------------------
+
+== Testing
+
+== Lookup Plugins
+
+== Filters
+
+=== Use `quote` filter on commands
+
+=== Use `to_json` filter in generated YAML
+
+== Custom Modules
+
+== Templating with Jinja2
+
+=== Template indentation
