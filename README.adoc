@@ -18,6 +18,16 @@
     creates: /etc/example/install.log
 ```
 
+```
+- name: Deployment for MyApp
+  k8s:
+    state: present
+    definition: "{{ myapp_deployment }}"
+  when: >-
+    myapp_install_k8s|bool or
+    myapp_install_openshift|bool
+```
+
 == Idempotence
 
 Levels of code quality:
@@ -42,6 +52,8 @@ Even if there is only one host in a group, use of groups still provides clarity.
 
 == Playbook
 
+=== Name your plays
+
 === Avoid `group_vars` and `host_vars`?
 
 Using `group_vars` and `host_vars` in a playbook requires strict rules of ansible group naming which are best avoided.
@@ -61,11 +73,37 @@ If sets of variables need to be set based on group, try using `include_vars` ins
 
 == Tasks
 
+=== Name your tasks
+
+=== User `verbosity` with `debug` tasks
+
 === Error Handling
 
-==== Use `failed_when`
+Do not `ignore_errors`.
+Using `ignore_errors` still reports an error and is often confusing.
 
-Do not `ignore_errors`
+Use `failed_when` instead.
+Using `failed_when` allows you to give your own error conditions.
+
+https://docs.ansible.com/ansible/latest/user_guide/playbooks_error_handling.html
+
+=== Fail early with `assert` and `fail`
+
+--------------------------------------------------------------------------------
+- name: Check for valid url
+  fail:
+    msg: Invalid url: {{ myapp_url }}
+  when: >-
+    not myapp_url.startswith('https://') or
+    not myapp_url is search('/myapp/')
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+- name: Assert valid url
+  assert:
+  - myapp_url.startswith('https://') or
+  - myapp_url is search('/myapp/')
+--------------------------------------------------------------------------------
 
 === `command` module
 
@@ -107,6 +145,10 @@ myapp_openshift_dev_nampsace: mapp-dev
 == Lookup Plugins
 
 == Filters
+
+=== Use `default` filter
+
+=== Pass all boolean values through `bool`
 
 === Use `quote` filter on commands
 
