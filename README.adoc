@@ -1,10 +1,30 @@
 = Ansible Best Practices
 
+A collection of notes on Ansible best practices...
+
 == Version Control
+
+Use git version control for your playbooks, roles, and inventory.
 
 == YAML
 
+Ansible playbooks are first parsed as YAML and then processed.
+This is important to keep in mind as errors may occur both during YAML parsing or during playbook execution.
+
 === Use Block Quotes
+
+Block quotes help avoid long lines.
+The `>-` operator converts line breaks to spaces.
+The `|-` operator keeps newlines.
+
+```
+# Need a better example... this should use lineinfile...
+- name: Add envirnoment variables
+  blockinfile:
+    block: |-
+      MYAPP_DOMAIN=example.com
+      MYAPP_DIR=/opt/myapp
+```
 
 ```
 - name: Run Installer Script
@@ -39,7 +59,9 @@ Levels of code quality:
 
 == Inventory
 
-=== Use YAML
+=== Use an inventory directory
+
+Ansible may be pointed to an inventory directory and will load all inventories found within the inventory directory.
 
 === Use `group_vars`
 
@@ -48,11 +70,21 @@ Levels of code quality:
 Hosts should normally be grouped to specify the purpose assigned to each host.
 Even if there is only one host in a group, use of groups still provides clarity.
 
+=== Separate inventories for similar environments with common `group_vars`
+
+This provides a simple way to separate environment specific variables from the common variables.
+
+Separate environments by inventory.
+
 === Group Naming
+
+Name groups with obvious names that describe the function of the groups.
 
 == Playbook
 
 === Name your plays
+
+Naming everything is best practice because it lets you track down errors faster.
 
 === Avoid `group_vars` and `host_vars`?
 
@@ -69,7 +101,8 @@ If sets of variables need to be set based on group, try using `include_vars` ins
 
 == Roles
 
-* Use Roles
+Start structuring your playbooks around use of Ansible roles early in your development process.
+Role directory structure provides a standard for tasks, files, templates, modules, etc.
 
 == Tasks
 
@@ -122,11 +155,13 @@ Using `assert`:
 ** `chdir` Set working directory for command
 ** `creates` Only run if file does not exist
 ** `removes` Only run if file exists
-** `warn` Use to disable warnings
+** `warn` Use to disable warnings when needed
 
 === `shell` module
 
-* Only use `shell` if you cannot use `command`
+Only use `shell` if you cannot use `command`
+
+Avoid `echo` to pass input to commands, the `command` and `shell` modules both have built-in support for passing standard input.
 
 == Variables
 
@@ -158,7 +193,11 @@ When registering variables, use `r_` prefix.
 
 For example, `pipe`
 
+FIXME - I believe you can provide a custom do-nothing version of plugins, but need to verify.
+
 == Filters
+
+Ansible provides a number of filters in addition to the core jinja2 filters.
 
 === Use `bool` to evaluate boolean expressions
 
@@ -166,12 +205,21 @@ For example, `pipe`
 
 === Use `json_query` filter to process complex data structures
 
+The `json_query` filter uses the powerful JMESPath query language:
+
+http://jmespath.org/
+
 === Use `quote` filter on commands
 
 === Use `to_json` filter in generated YAML
 
 == Custom Modules
 
+Custom modules are faster than running multiple tasks and are often easier.
+Python programming for modules is not as hard as you may think.
+
 == Templating with Jinja2
+
+Ansible lets you use jinja2 templating anywhere.
 
 === Template indentation
