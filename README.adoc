@@ -223,3 +223,11 @@ Python programming for modules is not as hard as you may think.
 Ansible lets you use jinja2 templating anywhere.
 
 === Template indentation
+
+Render a new format from data structure
+
+```
+{{ some_variable | to_nice_json(indent=2) }}
+{{ some_variable | to_nice_yaml(indent=8) }}
+
+```
