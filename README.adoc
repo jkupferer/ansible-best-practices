@@ -216,10 +216,13 @@ http://jmespath.org/
 == Custom Modules
 
 Custom modules are faster than running multiple tasks and are often easier.
-Python programming for modules is not as hard as you may think.
+Python programming for modules is not as hard as you may think. To start,
+you can add a `library` folder to your module, then create your python code.
+Should follow https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html#starting-a-new-module[this document].
+The name of the python file, can then be utilized within your ansible-playbook.
 
 == Templating with Jinja2
 
-Ansible lets you use jinja2 templating anywhere.
+Ansible lets you use jinja2 templating anywhere. https://docs.ansible.com/ansible/latest/user_guide/playbooks_templating.html[Ansible Jinja2 Templating].
 
 === Template indentation
