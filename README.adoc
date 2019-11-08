@@ -226,3 +226,11 @@ The name of the python file, can then be utilized within your ansible-playbook.
 Ansible lets you use jinja2 templating anywhere. https://docs.ansible.com/ansible/latest/user_guide/playbooks_templating.html[Ansible Jinja2 Templating].
 
 === Template indentation
+
+Render a new format from data structure
+
+```
+{{ some_variable | to_nice_json(indent=2) }}
+{{ some_variable | to_nice_yaml(indent=8) }}
+
+```
